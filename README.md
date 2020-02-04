@@ -48,7 +48,7 @@ In both scenarios, the value is returned by a layer without recursing further.
 ![Second Base Case](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/recursion3.png)
 This is the second base case. It's designed to exit the entire recursive function when the current slices eaten plus the next pizza, equal *exactly* our target. In other words, there is no need to continue recursing when the solution is already found. 
 
-Note: This method currently only exits one branch of recursion, there are additional checks below to ensure that the tree collapses at every branch and eventually returns to the root. 
+Note: This method currently only technically exits one branch of recursion, there are additional checks below to ensure the tree collapses at every node and eventually returns to the root. 
 
 ## Recursive Steps
 The recursive steps represent the usual case steps for the method. They are continually called upon to eventually construct a recursive tree. 
@@ -59,10 +59,10 @@ In larger input scenarios, this is unlikely to result in a value closer to the t
 
 ![Second Recursive Step](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/recursion5.png)
 This is the second recursive step. It's designed to traverse the tree many times, creating the bulk of the *legal* (se < n) nodes. 
-The method recurses the right-hand side of the tree first, as this is the side more likely to be closer to the target value (A larger target value, will likely have higher bounds of Pizza's, meaning we are less likely to fill the target by starting with the smaller indexes).  
+The method recurses the right-hand side of the tree first, as this is the side more likely to be closer to the target value (A larger target value, will likely have higher bounds of Pizza's, meaning we are less likely to fill the target by starting with the smaller indexes). The right hand branch of each node (First call of Repizzafy) is the value **adding** the current index, while the left side (Second call of Repizzafy) is the value of the current index **without adding** the current pizza.   
 
-The method also contains exit conditions for Base Case 2, where the entire tree is required to immediately collapse. The two fall out conditions ensure that any returning branches will immediately exit or else be trapped in any more recursive layers (Which is the normal route for any value that is not exactly **n**). This is a comparatively unusual exit condition, as Base Case 1 only exits the current iteration and not the entire tree. 
+The method also contains exit conditions for Base Case 2, where the entire tree is required to immediately collapse. The two fall out conditions ensure that any returning branches will immediately exit or else be trapped in more recursive layers (Which is the normal route for any value that is not exactly **n**). This is a comparatively unusual exit condition, as Base Case 1 only exits the current iteration and not the entire tree. 
 
-Each time *Repizzafy* is called, a branch is created and the ones that do not exit early reach the last few comparison lines. This will always grab and return the larger value without fear of it being an illegal node (the value was created by pizzas in the stack and any value greater than **n** was weeded out prior). 
+Each time *Repizzafy* is called, a branch is created and the ones that do not exit early reach the last comparison lines. This will always grab and return the larger value without fear of it being an illegal node (the value was created by pizzas in the stack and any value greater than **n** was weeded out prior) pushing it back up one layer of recursion. Therefore, the comparison made right before the root of the node will yield the current stack of pizzas closest or equal to the target **n**. 
 
 

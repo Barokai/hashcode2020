@@ -2,10 +2,10 @@
 This solution will produce a *perfect* score, collectively testing all cases in under a second (~0.81 seconds average). 
 It is a **recursive** solution written in **C#** and does not implement memoization. 
 
-##Score
+## Score
 ![Score](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/score.png)
 
-##Input
+## Input
 This is the root of the program. It's goal is to immediately locate the inputs and convert them for the Main method. 
 
 ![Read Input](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/input1.png)
@@ -17,13 +17,13 @@ A watch is added to time the solution in milliseconds. This is not needed to sol
 ![Thread](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/input3.png)
 As *Pizzafy* will go very deep recursively, the maximum stack size needs to be increased prior to calling the function. This is required for **e_also_big.in** and other larger custom inputs.
 
-##Main
+## Main
 This is the Main method. It's goal is to call the recursive function and then produce the respective output file, optionally logging the results along the way. 
 
 ![Main](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/main1.png)
 **Repizzafy** will repeatedly call upon itself until the satisfactory stack of Pizza's is returned. The next paragraph converts and logs the results into Slices, Pizzas needed and the order of Pizzas needed. The last two lines create the required output file. 
 
-##Recursion
+## Recursion
 This is the recursion method. It's goal is to construct and return the correct Pizza Stack structure all the way back to the main method. The chosen return types are a Tuple of int (Slices Eaten) and a Stack<string> (Pizzas Eaten). The int is used as a comparator of slices in each branch, while the stack is used to track the Pizzas, manipulating it in *O(1)* time (Pop, Push).  
 
 ![Inputs](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/recursion1.png)
@@ -35,7 +35,7 @@ This is the recursion method. It's goal is to construct and return the correct P
 * **pe**: This is the order of pizzas eaten in the current iteration.
 * **hep**: This is the order of Pizzas eaten in the highest iteration encountered so far.
 
-###Base Cases
+### Base Cases
 Base Cases, according to (https://web.mit.edu/6.005/www/fa16/classes/14-recursion/#structure_of_recursive_implementations) are the simplest, smallest instance of the problem, that can’t be decomposed any further. Base cases often correspond to emptiness – the empty string, the empty list, the empty set, the empty tree, zero, etc.
 
 ![First Base Case](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/recursion2.png)
@@ -50,7 +50,7 @@ This is the second base case. It's designed to exit the entire recursive functio
 
 Note: This method currently only exits one branch of recursion, there are additional checks below to ensure that the tree collapses at every branch and eventually returns to the root. 
 
-##Recursive Steps
+## Recursive Steps
 The recursive steps represent the usual case steps for the method. They are continually called upon to eventually construct a recursive tree. 
 
 ![First Recursive Step](https://github.com/trevorlao95/hashcode2020/blob/master/hashcode2020qualifier/img/recursion4.png)

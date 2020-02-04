@@ -8,78 +8,6 @@ namespace Qualifier
 {
     internal class hashcode
     {
-        /// <param name="n">Number of slices</param>
-        /// <param name="p">Number of pizzas</param>
-        /// <param name="s">Number of slices per pizza</param>
-        private static void Pizzafy(int n, int[] s, string output)
-        {
-            Tuple<int, Stack<string>> pizzas = Repizzafy(s.Length - 1, n, 0, 0, s, new Stack<string>(), new Stack<string>());
-
-            string order = string.Empty;
-            pizzas.Item2.ToList().ForEach(x => order += x + " ");
-            Console.WriteLine("Slices: " + pizzas.Item1);
-            Console.WriteLine(pizzas.Item2.Count);
-            Console.WriteLine();
-
-            string[] lines = { pizzas.Item2.Count.ToString(), order };
-            System.IO.File.WriteAllLines(Path.Combine(Directory.GetCurrentDirectory(), "../../../output/" + output), lines);
-        }
-
-        /// <param name="i"> Index </param>
-        /// <param name="n"> Number of pizzas </param>
-        /// <param name="se"> Slices eaten </param>
-        /// <param name="s"> Slices </param>
-        /// <param name="pe"> List of pizza's eaten </param>
-        /// <returns></returns>
-        private static Tuple<int, Stack<string>> Repizzafy(int i, int n, int se, int he, int[] s, Stack<string> pe, Stack<string> hep)
-        {
-            // Base conditions
-            // Index reaches below 0
-            if (i < 0)
-            {
-                // If slices is greater than highest
-                if (se > he)
-                {
-                    he = se;
-                    hep = new Stack<string>(pe.Reverse());
-                    return new Tuple<int, Stack<string>>(he, hep);
-                }
-
-                return new Tuple<int, Stack<string>>(se, hep);
-            }
-
-            // Slices eaten is the exact number
-            if (se + s[i] == n)
-            {
-                pe.Push(i.ToString());
-                return new Tuple<int, Stack<string>>(se + s[i], pe);
-            }
-
-            // Slices is greater than the exact number
-            else if (se + s[i] > n)
-                return Repizzafy(i - 1, n, se, he, s, pe, hep);
-            // Normal condition, less than n
-            else
-            {
-                pe.Push(i.ToString());
-                Tuple<int, Stack<string>> temp1 = Repizzafy(i - 1, n, se + s[i], he, s, pe, hep);
-
-                if (temp1.Item1 == n)
-                    return new Tuple<int, Stack<string>>(n, temp1.Item2);
-
-                pe.Pop();
-                Tuple<int, Stack<string>> temp2 = Repizzafy(i - 1, n, se, he, s, pe, hep);
-
-                if (temp2.Item1 == n)
-                    return new Tuple<int, Stack<string>>(n, temp2.Item2);
-
-                if (temp1.Item1 > temp2.Item1)
-                    return temp1;
-                else
-                    return temp2;
-            }
-        }
-
         private static void Main(string[] args)
         {
             string[] lines;
@@ -119,6 +47,90 @@ namespace Qualifier
         private static string[] ReadInput(string input)
         {
             return System.IO.File.ReadAllLines(Path.Combine("../../../input/", input));
+        }
+
+        /// <summary>
+        /// Method to call the recursion and format the file
+        /// </summary>
+        /// <param name="n"> Slices to hit </param>
+        /// <param name="s"> Int Array of pizzas with their slices </param>
+        /// <param name="output"> Output file name </param>
+        private static void Pizzafy(int n, int[] s, string output)
+        {
+            Tuple<int, Stack<string>> pizzas = Repizzafy(s.Length - 1, n, 0, 0, s, new Stack<string>(), new Stack<string>());
+
+            string order = string.Empty;
+            pizzas.Item2.ToList().ForEach(x => order += x + " ");
+            Console.WriteLine("Slices: " + pizzas.Item1);
+            Console.WriteLine(pizzas.Item2.Count);
+            Console.WriteLine();
+
+            string[] lines = { pizzas.Item2.Count.ToString(), order };
+            System.IO.File.WriteAllLines(Path.Combine(Directory.GetCurrentDirectory(), "../../../output/" + output), lines);
+        }
+
+
+        /// <summary>
+        /// Recursive method to create the result tree
+        /// </summary>
+        /// <param name="i"> Current Index </param>
+        /// <param name="n"> Maximum number of slices </param>
+        /// <param name="se"> Slices eaten </param>
+        /// <param name="he"> Highest eaten slices </param>
+        /// <param name="s"> Int Array of pizzas with their slices </param>
+        /// <param name="pe"> Order of Pizzas eaten for current iteration </param>
+        /// <param name="hep"> Order of Pizzas eaten for the highest iteration </param>
+        /// <returns></returns>
+        private static Tuple<int, Stack<string>> Repizzafy(int i, int n, int se, int he, int[] s, Stack<string> pe, Stack<string> hep)
+        {
+            // Base conditions
+            // Index reaches below 0
+            if (i < 0)
+            {
+                // If slices is greater than highest
+                if (se > he)
+                {
+                    he = se;
+                    hep = new Stack<string>(pe.Reverse());
+                    return new Tuple<int, Stack<string>>(he, hep);
+                }
+
+                return new Tuple<int, Stack<string>>(se, hep);
+            }
+            // Slices eaten is the exact number
+            if (se + s[i] == n)
+            {
+                pe.Push(i.ToString());
+                return new Tuple<int, Stack<string>>(se + s[i], pe);
+            }
+            // Slices is greater than the exact number
+            else if (se + s[i] > n)
+                return Repizzafy(i - 1, n, se, he, s, pe, hep);
+            // Normal condition, less than n
+            else
+            {
+                // Traverse the right side of the tree first
+                pe.Push(i.ToString());
+                Tuple<int, Stack<string>> temp1 = Repizzafy(i - 1, n, se + s[i], he, s, pe, hep);
+
+                // Fall out for the base condition
+                if (temp1.Item1 == n)
+                    return new Tuple<int, Stack<string>>(n, temp1.Item2);
+
+                // Traverse the left
+                pe.Pop();
+                Tuple<int, Stack<string>> temp2 = Repizzafy(i - 1, n, se, he, s, pe, hep);
+
+                // Fall out for the base condition
+                if (temp2.Item1 == n)
+                    return new Tuple<int, Stack<string>>(n, temp2.Item2);
+
+                // Comparison for majority of iterations
+                if (temp1.Item1 > temp2.Item1)
+                    return temp1;
+                else
+                    return temp2;
+            }
         }
     }
 }
